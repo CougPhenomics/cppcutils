@@ -1,0 +1,16 @@
+Package: cppcutils
+Title: Utilities for Compact Plants Phenomics Center (CPPC)
+Version: 0.0.0.9000
+Authors@R:
+    person(given = "Dominik",
+           family = "Schneider",
+           role = c("aut", "cre"),
+           email = "dominik.schneider@wsu.edu",
+           comment = c(ORCID = "0000-0002-5846-5033"))
+Description: Supports analysis of data collected at CPPC. Most image fetching and image analysis is done separately in Python/PlantCV, but watering data can also be downloaded directly from the server.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+    pick a license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
