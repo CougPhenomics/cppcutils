@@ -7,8 +7,7 @@
 #' @export
 #' @import rlang
 #' @return dataframe with summary columns named as `{statistic}_{phenotype}`
-#' @example 
-#' summarise_phenotypes(mtcars,phenotype = c(hp, disp), statistic = list(med=median), na.rm=T)
+#' @examples summarise_phenotypes(mtcars,phenotype = c(hp, disp), statistic = list(med=median), na.rm=T)
 #' @details the default is to group by `gtype`, `idate`, `jobdate`. For PSII data you need to additionally specify `parameter`
    
    

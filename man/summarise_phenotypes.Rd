@@ -32,3 +32,6 @@ Summarise phenotypes
 \details{
 the default is to group by \code{gtype}, \code{idate}, \code{jobdate}. For PSII data you need to additionally specify \code{parameter}
 }
+\examples{
+summarise_phenotypes(mtcars,phenotype = c(hp, disp), statistic = list(med=median), na.rm=T)
+}
