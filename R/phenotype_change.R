@@ -3,7 +3,9 @@
 #'
 #' @param refcol column name 
 #' @param refvalue string to identify reference
-#' @param ... additional columns to keep in the outpur
+#' @param ... additional columns to keep in the output
+#' @import dplyr
+#' @import tidyr
 #' @return dataframe
 
 reference_phenotype <- function(dF, statcol_central= 'med', statcol_spread = 'sd', refcol = 'gtype', refvalue = 'WT', ...){
@@ -11,7 +13,7 @@ reference_phenotype <- function(dF, statcol_central= 'med', statcol_spread = 'sd
   dF %>%
     ungroup %>% 
     filter(refcol==refvalue) %>%
-    select(idate, jobdate, -gtype, refcentral = {{statcol_central}}, refspread={{statcol_spread}}, ...)
+    dplyr::select(idate, jobdate, -gtype, refcentral = {{statcol_central}}, refspread={{statcol_spread}}, ...)
   
 }
 

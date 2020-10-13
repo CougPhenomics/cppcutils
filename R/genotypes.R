@@ -5,6 +5,8 @@
 #' @param gtypeorder vector of genotype levels in custom order
 #' @return tibble, with gtype as a factor. 
 #' @import forcats
+#' @import tidyr
+#' @import dplyr
 #' @export
 #' @details The standard columns for this file are plantbarcode, roi, gtype and should map each unique position in the hotel to a genotype
 #' the genotypemap is part of every experiment and maps the barcode and roi # with the genotype.
@@ -13,7 +15,7 @@ get_genotypemap <- function(fn,
                             wtcode = 'WT',
                             gtypeorder = NULL) {
   
-  gtypemap <- read_csv(fn, col_types = cols('gtype' = 'f'))
+  gtypemap <- readr::read_csv(fn, col_types = readr::cols('gtype' = 'f'))
   
   assertthat::assert_that(wtcode %in% gtypemap$gtype,  msg = glue::glue('The `wtcode` {wtcode} is not found in the genotypemap. are you using a different code for wild-type?'))
   
@@ -21,6 +23,7 @@ get_genotypemap <- function(fn,
     
     gtypemap %>%
       mutate(gtype = fct_relevel(gtype, sort),
+             gtype = fct_drop(gtype, 'NA'),
              gtype = fct_relevel(gtype, {{wtcode}}, after = 0)) #putting WT to the front of the list so we can color it black always
     
   } else {
@@ -46,15 +49,20 @@ genotype_colors <- function(gtypemap, colorpal=NULL){
   u_gtypes = levels(gtypemap$gtype)
   n_gtypes = length(u_gtypes)
   # default behavior. 'black' is always WT
-  if(is.null(colorpal) & n_gtypes <= 19){
-    gtypeColors = c('black',RColorBrewer::brewer.pal(9,'Set1'),RColorBrewer::brewer.pal(9,'Pastel1'))
-    names(gtypeColors) <- u_gtypes
-  } else if(is.null(colorpal) & n_types>19){
-    stop('You have more than 19 genotypes. You will need to provide your own color palette using the `colorpal` argument.')
+  if(is.null(colorpal)){
+    if(n_gtypes <= 4){
+      gtypeColors = c('black',RColorBrewer::brewer.pal(3,'Set1')[1:(n_gtypes-1)])
+    } else if(n_gtypes <= 10){
+      gtypeColors = c('black',RColorBrewer::brewer.pal(n_gtypes-1,'Set1'))
+    } else if(n_gtypes > 9 & n_gtypes <= 19 ){
+      gtypeColors = c('black',RColorBrewer::brewer.pal(9,'Set1'),RColorBrewer::brewer.pal(n_gtypes-10,'Pastel1'))
+    } else if(n_types>19){
+      stop('You have more than 19 genotypes. You will need to provide your own color palette using the `colorpal` argument.')
+    }
   } else {
     gtypeColors = colorpal
-    names(gtypeColors) <- u_gtypes
   }
+  names(gtypeColors) <- u_gtypes
   
   return(gtypeColors) 
 }
@@ -67,6 +75,8 @@ genotype_colors <- function(gtypemap, colorpal=NULL){
 #' @param plantprefix prefix for filename that include tray and roi #s to be included. 'all' is preserved for no filtering.
 #' @param rejectgtypes logical. default=FALSE. TRUE means the complementary set of genotypes specified by plantprefix file will be analyzed.
 #' @export
+#' @import tidyr
+#' @import dplyr
 #' @details 
 #' this should be run after `get_genotypemap()`
 #' the plantprefix is part of `<plantprefix>_gtypes_[A-Z].csv`. Each such file with a common plantprefix identifies the poster child individuals that get used for a collage. The suffix A,B,... are to allow multiple columns of genotypes in the collage. All suffixed files are read in this function.
@@ -93,7 +103,7 @@ filter_gtype <- function(gtypemap, plantprefix, rejectgtypes=F ){
   }
   
   gtypekeep <- gtypekeep %>% 
-    select(gtype) %>% 
+    dplyr::select(gtype) %>% 
     distinct(gtype) %>% 
     mutate(gtype_c = as.character(gtype))
   

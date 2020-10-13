@@ -18,7 +18,7 @@ reference_phenotype(
 
 \item{refvalue}{string to identify reference}
 
-\item{...}{additional columns to keep in the outpur}
+\item{...}{additional columns to keep in the output}
 }
 \value{
 dataframe

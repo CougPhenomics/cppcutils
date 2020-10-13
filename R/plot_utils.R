@@ -28,7 +28,8 @@ italic_labels <- function(names){
 
 
 #' Dark cowplot theme
-#' @param bkgrdcol valid color for background. default = 'grey35'
+#' @param bkgrdcol valid color for background. default = 'grey40'
+#' @param ... arguments for `theme_cowplot()`
 #' @export
 #' @details see `theme_cowplot()` for input arguments.
 #' panel.background is set to grey40 to better accommodate black and light colors when number of genotypes is >9

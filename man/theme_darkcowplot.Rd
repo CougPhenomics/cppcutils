@@ -7,7 +7,9 @@
 theme_darkcowplot(bkgrdcol = "grey40", ...)
 }
 \arguments{
-\item{bkgrdcol}{valid color for background. default = 'grey35'}
+\item{bkgrdcol}{valid color for background. default = 'grey40'}
+
+\item{...}{arguments for \code{theme_cowplot()}}
 }
 \description{
 Dark cowplot theme
